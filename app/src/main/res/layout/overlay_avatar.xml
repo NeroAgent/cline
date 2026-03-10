@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp">
+
+    <View
+        android:id="@+id/pulseRing"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/nero_awake" />
+
+    <ImageView
+        android:id="@+id/avatarCircle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:contentDescription="@string/avatar_content_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/nero_circle" />
+</FrameLayout>
