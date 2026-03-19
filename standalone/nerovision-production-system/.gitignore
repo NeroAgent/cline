@@ -1,0 +1,4 @@
+termux/var/
+android/.gradle/
+android/local.properties
+android/app/build/

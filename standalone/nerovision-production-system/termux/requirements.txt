@@ -1,0 +1,6 @@
+faiss-cpu
+llama-cpp-python
+numpy
+openai-whisper
+pillow
+psutil
