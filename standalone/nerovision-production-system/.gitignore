@@ -1,4 +1,6 @@
 termux/var/
+termux/**/__pycache__/
+termux/**/*.pyc
 android/.gradle/
 android/local.properties
 android/app/build/
