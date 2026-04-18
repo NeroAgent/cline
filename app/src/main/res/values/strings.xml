@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nero Vision</string>
+    <string name="config_description">Hermes-lite Android bridge. No local inference, relay-first design.</string>
+    <string name="gemini_api_key_hint">Gemini API key</string>
+    <string name="openrouter_api_key_hint">OpenRouter API key (fallback)</string>
+    <string name="enable_ollama">Enable local Ollama fallback</string>
+    <string name="start_nero">Start Nero</string>
+    <string name="overlay_permission_required">Overlay permission required to launch Nero.</string>
+    <string name="overlay_notification_title">Nero Overlay Running</string>
+    <string name="overlay_notification_message">Tap avatar to wake/sleep. Double tap for vision capture.</string>
+    <string name="capture_notification_title">Capturing screen</string>
+    <string name="capture_notification_message">Nero is capturing a low-resolution screenshot for analysis.</string>
+    <string name="capture_permission_required">Grant screen capture permission, then double tap again.</string>
+    <string name="capture_permission_granted">Screen capture permission granted.</string>
+    <string name="capture_permission_denied">Screen capture permission denied.</string>
+    <string name="dismiss_hint">Release here to dismiss Nero</string>
+    <string name="avatar_content_description">Nero assistant avatar</string>
+    <string name="awake_on">Nero awake</string>
+    <string name="awake_off">Nero sleeping</string>
+</resources>
