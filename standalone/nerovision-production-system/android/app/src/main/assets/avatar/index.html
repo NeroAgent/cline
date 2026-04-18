@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeroVision Avatar</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+    }
+  </style>
+</head>
+<body>
+  <canvas id="avatar"></canvas>
+  <script>
+    const canvas = document.getElementById("avatar");
+    const ctx = canvas.getContext("2d");
+    const state = {
+      mood: "calm",
+      amplitude: 0.15,
+      visible: true,
+      pulseHue: 210,
+      message: ""
+    };
+
+    function resize() {
+      canvas.width = canvas.clientWidth * devicePixelRatio;
+      canvas.height = canvas.clientHeight * devicePixelRatio;
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function draw(time) {
+      resize();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!state.visible) {
+        requestAnimationFrame(draw);
+        return;
+      }
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const t = time / 1000;
+      const amp = Math.max(0.05, Math.min(1, Number(state.amplitude) || 0.15));
+
+      const moodMap = {
+        calm: { hue: 210, smile: 0.15, brow: 0.0 },
+        listening: { hue: 185, smile: 0.08, brow: -0.1 },
+        thinking: { hue: 285, smile: 0.0, brow: 0.12 },
+        speaking: { hue: 25, smile: 0.28, brow: -0.05 },
+        alert: { hue: 355, smile: -0.08, brow: 0.18 }
+      };
+      const mood = moodMap[state.mood] || moodMap.calm;
+      const hue = state.pulseHue || mood.hue;
+      const radius = Math.min(w, h) * (0.28 + amp * 0.05 + Math.sin(t * 2.4) * 0.015);
+
+      const bg = ctx.createRadialGradient(cx, cy, radius * 0.2, cx, cy, radius * 1.9);
+      bg.addColorStop(0, `hsla(${hue}, 95%, 62%, 0.95)`);
+      bg.addColorStop(0.55, `hsla(${hue + 25}, 90%, 44%, 0.65)`);
+      bg.addColorStop(1, "rgba(10, 14, 26, 0)");
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * 1.7, 0, Math.PI * 2);
+      ctx.fill();
+
+      const shell = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy + radius);
+      shell.addColorStop(0, `hsla(${hue}, 100%, 85%, 0.95)`);
+      shell.addColorStop(1, `hsla(${hue + 35}, 100%, 50%, 0.9)`);
+      ctx.fillStyle = shell;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(12, 16, 24, 0.8)";
+      ctx.beginPath();
+      ctx.arc(cx - radius * 0.28, cy - radius * 0.08, radius * 0.11, 0, Math.PI * 2);
+      ctx.arc(cx + radius * 0.28, cy - radius * 0.08, radius * 0.11, 0, Math.PI * 2);
+      ctx.fill();
+
+      const blink = Math.max(0.1, Math.abs(Math.sin(t * 0.85 + amp)) > 0.985 ? 0.05 : 1);
+      ctx.strokeStyle = "rgba(12, 16, 24, 0.9)";
+      ctx.lineWidth = radius * 0.05;
+      ctx.beginPath();
+      ctx.moveTo(cx - radius * 0.45, cy - radius * (0.22 + mood.brow));
+      ctx.quadraticCurveTo(cx - radius * 0.28, cy - radius * (0.34 + mood.brow), cx - radius * 0.12, cy - radius * (0.2 + mood.brow));
+      ctx.moveTo(cx + radius * 0.12, cy - radius * (0.2 + mood.brow));
+      ctx.quadraticCurveTo(cx + radius * 0.28, cy - radius * (0.34 + mood.brow), cx + radius * 0.45, cy - radius * (0.22 + mood.brow));
+      ctx.stroke();
+
+      ctx.strokeStyle = "rgba(12, 16, 24, 0.88)";
+      ctx.lineWidth = radius * 0.06;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      const mouthY = cy + radius * 0.2;
+      ctx.moveTo(cx - radius * 0.32, mouthY);
+      ctx.quadraticCurveTo(cx, mouthY + radius * mood.smile * blink, cx + radius * 0.32, mouthY);
+      ctx.stroke();
+
+      for (let i = 0; i < 3; i += 1) {
+        const ring = radius * (1.15 + i * 0.22 + Math.sin(t * 1.8 + i) * 0.03);
+        ctx.strokeStyle = `hsla(${hue + i * 10}, 100%, 72%, ${0.16 - i * 0.035})`;
+        ctx.lineWidth = radius * 0.04;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ring, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.setAvatarState = function setAvatarState(payload) {
+      let next = payload;
+      if (typeof payload === "string") {
+        try {
+          next = JSON.parse(payload);
+        } catch (error) {
+          return false;
+        }
+      }
+      Object.assign(state, next || {});
+      return true;
+    };
+
+    window.addEventListener("resize", resize);
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>

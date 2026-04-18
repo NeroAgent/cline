@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NeroVision</string>
+    <string name="accessibility_service_name">NeroVision Accessibility</string>
+    <string name="notification_channel_name">NeroVision Runtime</string>
+    <string name="notification_bootstrap_text">NeroVision services are active</string>
+    <string name="main_status_ready">Ready to initialize on-device assistant services.</string>
+    <string name="main_action_start">Start core services</string>
+    <string name="main_action_overlay">Grant overlay</string>
+    <string name="main_action_projection">Grant screen capture</string>
+    <string name="main_action_accessibility">Open accessibility settings</string>
+    <string name="main_action_mic">Request microphone</string>
+</resources>
